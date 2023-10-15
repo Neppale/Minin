@@ -27,4 +27,13 @@ describe('GetUrlByShortCodeService', () => {
 
     expect(getOriginalUrlByShortCodeRepositoryMock.count).toBe(1);
   });
+
+  it('should throw if getOriginalUrlByShortCodeRepository.get returns null', async () => {
+    const { sut, getOriginalUrlByShortCodeRepositoryMock } = makeSut();
+    getOriginalUrlByShortCodeRepositoryMock.response = null;
+
+    const promise = sut.get('abc123');
+
+    await expect(promise).rejects.toThrow();
+  });
 });
