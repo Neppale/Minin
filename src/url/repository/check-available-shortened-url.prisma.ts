@@ -12,10 +12,10 @@ export class CheckAvailableShortenedUrlPrisma
   constructor(prisma: PrismaService) {
     this.prisma = prisma;
   }
-  async check(url: string): Promise<boolean> {
+  async check(shortCode: string): Promise<boolean> {
     const existingUrl = await this.prisma.url.findUnique({
       where: {
-        shortenedUrl: url,
+        shortCode,
       },
     });
     if (existingUrl) return false;
