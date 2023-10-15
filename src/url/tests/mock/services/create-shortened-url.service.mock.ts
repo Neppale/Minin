@@ -1,9 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Url } from '@prisma/client';
 import { CreateShortenedUrl } from '../../../services/useCases/create-shortened-url';
+import { CheckAvailableShortenedUrlRepository } from '../../../repository/useCases/check-available-shortened-url.repository';
+import { CreateShortenedUrlRepository } from '../../../repository/useCases/create-shortened-url.repository';
 
 export class CreateShortenedUrlServiceMock implements CreateShortenedUrl {
-  count = 0;
+  checkAvailableShortenedUrlRepository: CheckAvailableShortenedUrlRepository;
+  createShortenedUrlRepository: CreateShortenedUrlRepository;
+
+  createCount = 0;
+  generateCount = 0;
   response = {
     id: 1,
     originalUrl: 'https://www.google.com',
@@ -14,7 +20,12 @@ export class CreateShortenedUrlServiceMock implements CreateShortenedUrl {
   };
 
   async create(_url: string): Promise<Url> {
-    this.count++;
+    this.createCount++;
     return this.response;
+  }
+
+  generateRandomShortCode(): string {
+    this.generateCount++;
+    return this.response.shortCode;
   }
 }

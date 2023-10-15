@@ -39,7 +39,7 @@ export class CreateShortenedUrlService implements CreateShortenedUrl {
     return createdUrl;
   }
 
-  private generateRandomShortCode(): string {
+  generateRandomShortCode(): string {
     const length = 6;
     const characters =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
