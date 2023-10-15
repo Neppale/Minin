@@ -32,4 +32,9 @@ export class UrlController {
     const url = await this.getUrlByShortCodeService.get(shortCode);
     res.redirect(url.originalUrl);
   }
+
+  @Get('stats/:shortCode')
+  async getStats(@Param('shortCode') shortCode: string): Promise<Url> {
+    return this.getUrlByShortCodeService.get(shortCode);
+  }
 }

@@ -43,4 +43,12 @@ describe('UrlController', () => {
 
     expect(getUrlByShortCodeServiceMock.count).toBe(1);
   });
+
+  it('should call getOriginalUrlByShortCodeService.get once using getStats', () => {
+    const { sut, getUrlByShortCodeServiceMock } = makeSut();
+
+    sut.getStats('abc123');
+
+    expect(getUrlByShortCodeServiceMock.count).toBe(1);
+  });
 });
