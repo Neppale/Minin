@@ -1,26 +1,25 @@
 import { Response } from 'express';
 import { UrlController } from '../url.controller';
 import { CreateShortenedUrlServiceMock } from './mock/services/create-shortened-url.service.mock';
-import { GetOriginalUrlByShortCodeServiceMock } from './mock/services/get-original-url-by-short-code.service.mock';
+import { GetUrlByShortCodeServiceMock } from './mock/services/get-url-by-short-code.service.mock';
 
 type SutOutput = {
   sut: UrlController;
-  getOriginalUrlByShortCodeServiceMock: GetOriginalUrlByShortCodeServiceMock;
+  getUrlByShortCodeServiceMock: GetUrlByShortCodeServiceMock;
   createShortenedUrlServiceMock: CreateShortenedUrlServiceMock;
 };
 
 const makeSut = (): SutOutput => {
-  const getOriginalUrlByShortCodeServiceMock =
-    new GetOriginalUrlByShortCodeServiceMock();
+  const getUrlByShortCodeServiceMock = new GetUrlByShortCodeServiceMock();
   const createShortenedUrlServiceMock = new CreateShortenedUrlServiceMock();
   const sut = new UrlController(
     createShortenedUrlServiceMock,
-    getOriginalUrlByShortCodeServiceMock,
+    getUrlByShortCodeServiceMock,
   );
 
   return {
     sut,
-    getOriginalUrlByShortCodeServiceMock,
+    getUrlByShortCodeServiceMock,
     createShortenedUrlServiceMock,
   };
 };
@@ -35,13 +34,21 @@ describe('UrlController', () => {
   });
 
   it('should call getOriginalUrlByShortCodeService.get once', () => {
-    const { sut, getOriginalUrlByShortCodeServiceMock } = makeSut();
+    const { sut, getUrlByShortCodeServiceMock } = makeSut();
     const response: Response = {
       redirect: jest.fn(),
     } as unknown as Response<any>;
 
     sut.get('abc123', response);
 
-    expect(getOriginalUrlByShortCodeServiceMock.count).toBe(1);
+    expect(getUrlByShortCodeServiceMock.count).toBe(1);
+  });
+
+  it('should call getOriginalUrlByShortCodeService.get once using getStats', () => {
+    const { sut, getUrlByShortCodeServiceMock } = makeSut();
+
+    sut.getStats('abc123');
+
+    expect(getUrlByShortCodeServiceMock.count).toBe(1);
   });
 });

@@ -1,5 +1,5 @@
 import { Url } from '@prisma/client';
 
-export interface GetUrlByShortCodeRepository {
+export interface GetUrlByShortCode {
   get(shortCode: string): Promise<Url>;
 }
