@@ -4,6 +4,8 @@ import { CheckAvailableShortenedUrlPrisma } from './repository/check-available-s
 import { CreateShortenedUrlPrisma } from './repository/create-shortened-url.prisma';
 import { CreateShortenedUrlService } from './services/create-shortened-url.service';
 import { UrlController } from './url.controller';
+import { GetOriginalUrlByShortCodeService } from './services/get-original-url-by-short-code.service';
+import { GetOriginalUrlByShortCodePrisma } from './repository/get-original-url-by-short-code.prisma';
 
 @Module({
   imports: [],
@@ -13,6 +15,8 @@ import { UrlController } from './url.controller';
     CreateShortenedUrlService,
     CheckAvailableShortenedUrlPrisma,
     CreateShortenedUrlPrisma,
+    GetOriginalUrlByShortCodePrisma,
+    GetOriginalUrlByShortCodeService,
   ],
 })
 export class UrlModule {}
