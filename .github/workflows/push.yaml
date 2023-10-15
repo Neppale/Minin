@@ -1,0 +1,35 @@
+name: Push (non-main and non-develop branches)
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - develop
+
+jobs:
+  lint-test-audit-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Audit
+        run: npm audit --audit-level=critical
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
