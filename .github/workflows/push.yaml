@@ -1,4 +1,4 @@
-name: CI
+name: Push (non-main and non-develop branches)
 
 on:
   push:
@@ -7,16 +7,12 @@ on:
       - develop
 
 jobs:
-  checkout:
+  install:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-  install:
-    runs-on: ubuntu-latest
-    needs: checkout
-    steps:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -29,6 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: install
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Lint
         run: npm run lint
 
@@ -36,6 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: install
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Audit
         run: npm audit --audit-level=critical
 
@@ -43,6 +45,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: install
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Test
         run: npm run test
 
@@ -50,5 +55,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: install
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Build
         run: npm run build
