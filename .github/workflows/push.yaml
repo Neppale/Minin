@@ -26,7 +26,7 @@ jobs:
         run: npm run lint
 
       - name: Audit
-        run: npm run audit --audit-level=critical
+        run: npm audit --audit-level=critical
 
       - name: Test
         run: npm run test
