@@ -66,6 +66,29 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
+    "coveragePathIgnorePatterns": [
+      "node_modules",
+      "interfaces",
+      "jestGlobalMocks.ts",
+      ".module.ts",
+      ".model.ts",
+      ".enum.ts",
+      ".dto.ts",
+      ".prisma.ts",
+      ".options.ts",
+      "main.ts",
+      "prisma.service.ts",
+      ".mock.ts",
+      ".formatter.ts",
+      ".spy.ts",
+      ".params.ts",
+      ".query.ts",
+      "run-sync.ts",
+      "../scripts/services/",
+      "azure-insights.ts",
+      ".e2e.spec.ts",
+      "grpc-codes.ts"
+    ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }
