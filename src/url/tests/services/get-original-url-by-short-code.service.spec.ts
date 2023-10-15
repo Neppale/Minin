@@ -1,5 +1,5 @@
-import { GetOriginalUrlByShortCodeService } from '../services/get-original-url-by-short-code.service';
-import { GetOriginalUrlByShortCodeRepositoryMock } from './mock/repository/get-original-url-by-short-code.repository.mock';
+import { GetOriginalUrlByShortCodeService } from '../../services/get-original-url-by-short-code.service';
+import { GetOriginalUrlByShortCodeRepositoryMock } from '../mock/repository/get-original-url-by-short-code.repository.mock';
 
 type SutOutput = {
   sut: GetOriginalUrlByShortCodeService;

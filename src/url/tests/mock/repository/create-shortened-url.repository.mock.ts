@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Url } from '@prisma/client';
+import { PrismaClient, Url } from '@prisma/client';
 import { CreateShortenedUrlRepository } from '../../../repository/useCases/create-shortened-url.repository';
 import { CreateShortenedUrlParams } from '../../../models/params/create-shortened-url.params';
 
 export class CreateShortenedUrlRepositoryMock
   implements CreateShortenedUrlRepository
 {
+  prisma: PrismaClient;
   count = 0;
   response = {
     id: 1,
