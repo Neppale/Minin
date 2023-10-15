@@ -3,20 +3,20 @@ import { CreateShortenedUrl } from './services/useCases/create-shortened-url';
 import { CreateShortenedUrlService } from './services/create-shortened-url.service';
 import { CreateShortenedUrlDto } from './models/dto/create-shortened-url.dto';
 import { Url } from '@prisma/client';
-import { GetOriginalUrlByShortCode } from './services/useCases/get-original-url-by-short-code';
-import { GetOriginalUrlByShortCodeService } from './services/get-original-url-by-short-code.service';
+import { GetUrlByShortCode } from './services/useCases/get-url-by-short-code';
+import { GetUrlByShortCodeService } from './services/get-url-by-short-code.service';
 import { Response } from 'express';
 
 @Controller()
 export class UrlController {
   createShortenedUrlService: CreateShortenedUrl;
-  getOriginalUrlByShortCodeService: GetOriginalUrlByShortCode;
+  getUrlByShortCodeService: GetUrlByShortCode;
   constructor(
     createShortenedUrlService: CreateShortenedUrlService,
-    getOriginalUrlByShortCodeService: GetOriginalUrlByShortCodeService,
+    getUrlByShortCodeService: GetUrlByShortCodeService,
   ) {
     this.createShortenedUrlService = createShortenedUrlService;
-    this.getOriginalUrlByShortCodeService = getOriginalUrlByShortCodeService;
+    this.getUrlByShortCodeService = getUrlByShortCodeService;
   }
 
   @Post()
@@ -29,9 +29,7 @@ export class UrlController {
     @Param('shortCode') shortCode: string,
     @Res() res: Response,
   ): Promise<void> {
-    const originalUrl = await this.getOriginalUrlByShortCodeService.get(
-      shortCode,
-    );
-    res.redirect(originalUrl);
+    const url = await this.getUrlByShortCodeService.get(shortCode);
+    res.redirect(url.originalUrl);
   }
 }
