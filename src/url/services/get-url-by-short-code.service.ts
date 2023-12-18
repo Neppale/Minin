@@ -13,7 +13,8 @@ export class GetUrlByShortCodeService implements GetUrlByShortCode {
 
   async get(shortCode: string): Promise<Url> {
     const url = await this.getUrlByShortCodeRepository.get(shortCode);
-    if (!url) throw new NotFoundException('This URL does not exist.');
+    if (!url)
+      throw new NotFoundException({ message: 'This URL does not exist.' });
 
     return url;
   }

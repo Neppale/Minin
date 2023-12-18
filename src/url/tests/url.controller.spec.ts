@@ -47,7 +47,7 @@ describe('UrlController', () => {
   it('should call getOriginalUrlByShortCodeService.get once using getStats', () => {
     const { sut, getUrlByShortCodeServiceMock } = makeSut();
 
-    sut.getStats('abc123');
+    sut.getStats('abc123', 'Bearer token');
 
     expect(getUrlByShortCodeServiceMock.count).toBe(1);
   });

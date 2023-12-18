@@ -6,6 +6,7 @@ import { CreateShortenedUrlService } from './services/create-shortened-url.servi
 import { UrlController } from './url.controller';
 import { GetUrlByShortCodeService } from './services/get-url-by-short-code.service';
 import { GetUrlByShortCodePrisma } from './repository/get-url-by-short-code.prisma';
+import { GetUrlStatisticsService } from './services/get-url-statistics.service';
 
 @Module({
   imports: [],
@@ -17,6 +18,7 @@ import { GetUrlByShortCodePrisma } from './repository/get-url-by-short-code.pris
     CreateShortenedUrlPrisma,
     GetUrlByShortCodePrisma,
     GetUrlByShortCodeService,
+    GetUrlStatisticsService,
   ],
 })
 export class UrlModule {}

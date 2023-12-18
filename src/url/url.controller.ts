@@ -1,4 +1,13 @@
-import { Body, Controller, Post, Get, Param, Res } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  Body,
+  Controller,
+  Post,
+  Get,
+  Param,
+  Res,
+  Headers,
+} from '@nestjs/common';
 import { CreateShortenedUrl } from './services/useCases/create-shortened-url';
 import { CreateShortenedUrlService } from './services/create-shortened-url.service';
 import { CreateShortenedUrlDto } from './models/dto/create-shortened-url.dto';
@@ -34,7 +43,10 @@ export class UrlController {
   }
 
   @Get('stats/:shortCode')
-  async getStats(@Param('shortCode') shortCode: string): Promise<Url> {
+  async getStats(
+    @Param('shortCode') shortCode: string,
+    @Headers('authorization') _authorization: string,
+  ): Promise<Url> {
     return this.getUrlByShortCodeService.get(shortCode);
   }
 }
