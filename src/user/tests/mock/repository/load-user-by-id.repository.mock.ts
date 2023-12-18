@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { User } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { LoadUserByIdRepository } from '../../../repository/useCases/load-user-by-id.repository';
 
 export class LoadUserByIdRepositoryMock implements LoadUserByIdRepository {
+  prisma: PrismaClient;
   count = 0;
   response = {
     id: 1,
