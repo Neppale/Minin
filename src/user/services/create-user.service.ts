@@ -28,9 +28,13 @@ export class CreateUserService implements CreateUser {
       });
     }
     const hashedPassword = await hash(password, 12);
-    return await this.createUserRepository.create({
+    const createdUser = await this.createUserRepository.create({
       email,
       password: hashedPassword,
     });
+    return {
+      ...createdUser,
+      password: undefined,
+    };
   }
 }
