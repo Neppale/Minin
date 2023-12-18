@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { LoadUserByEmailRepository } from './useCases/load-user-by-email.repository';
+import { LoadUserByIdRepository } from './useCases/load-user-by-id.repository';
 import { PrismaClient } from '@prisma/client';
 import { PrismaService } from '../../prisma/services/prisma.service';
 
 @Injectable()
-export class LoadUserByEmailPrisma implements LoadUserByEmailRepository {
+export class LoadUserByIdPrisma implements LoadUserByIdRepository {
   prisma: PrismaClient;
 
   constructor(prisma: PrismaService) {
     this.prisma = prisma;
   }
-  async load(email: string) {
+
+  async load(id: number) {
     const user = await this.prisma.user.findUnique({
       where: {
-        email,
+        id,
         active: true,
       },
     });
