@@ -9,7 +9,7 @@ import { verify } from 'jsonwebtoken';
 import { AUTHORIZATION_REQUIRED_KEY } from '../authorization-required.decorator';
 
 @Injectable()
-export class AuthorizationRequired implements CanActivate {
+export class AuthorizationRequiredGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {

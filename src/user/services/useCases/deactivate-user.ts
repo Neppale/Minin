@@ -1,3 +1,3 @@
 export interface DeactivateUser {
-  deactivate(id: number): Promise<void>;
+  deactivate(id: number, authorization: string): Promise<void>;
 }

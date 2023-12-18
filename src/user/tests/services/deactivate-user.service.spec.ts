@@ -26,7 +26,10 @@ function makeSut(): SutOutput {
 describe('DeactivateUserService', () => {
   it('should call loadUserByIdRepository.load once', async () => {
     const { sut, loadUserByIdRepositoryMock } = makeSut();
-    await sut.deactivate(1);
+    await sut.deactivate(
+      1,
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJleHAiOjk5OTk5OTk5OTksImlhdCI6MTUxNjIzOTAyMn0.T4XSv7tPeAxm7UcH0lTXrSMtuuf8fYIVWkdVO7bIZSI',
+    );
 
     expect(loadUserByIdRepositoryMock.count).toBe(1);
   });
@@ -35,12 +38,20 @@ describe('DeactivateUserService', () => {
     const { sut, loadUserByIdRepositoryMock } = makeSut();
     loadUserByIdRepositoryMock.response = null;
 
-    await expect(sut.deactivate(1)).rejects.toThrow();
+    await expect(
+      sut.deactivate(
+        1,
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJleHAiOjk5OTk5OTk5OTksImlhdCI6MTUxNjIzOTAyMn0.T4XSv7tPeAxm7UcH0lTXrSMtuuf8fYIVWkdVO7bIZSI',
+      ),
+    ).rejects.toThrow();
   });
 
   it('should call deactivateUserRepository.deactivate once', async () => {
     const { sut, deactivateUserRepositoryMock } = makeSut();
-    await sut.deactivate(1);
+    await sut.deactivate(
+      1,
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJleHAiOjk5OTk5OTk5OTksImlhdCI6MTUxNjIzOTAyMn0.T4XSv7tPeAxm7UcH0lTXrSMtuuf8fYIVWkdVO7bIZSI',
+    );
 
     expect(deactivateUserRepositoryMock.count).toBe(1);
   });
