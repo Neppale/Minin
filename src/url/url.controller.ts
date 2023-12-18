@@ -15,17 +15,23 @@ import { Url } from '@prisma/client';
 import { GetUrlByShortCode } from './services/useCases/get-url-by-short-code';
 import { GetUrlByShortCodeService } from './services/get-url-by-short-code.service';
 import { Response } from 'express';
+import { AuthorizationRequired } from '../utils/authorization-required.decorator';
+import { GetUrlStatistics } from './services/useCases/get-url-statistics';
+import { GetUrlStatisticsService } from './services/get-url-statistics.service';
 
 @Controller()
 export class UrlController {
   createShortenedUrlService: CreateShortenedUrl;
   getUrlByShortCodeService: GetUrlByShortCode;
+  getUrlStatisticsService: GetUrlStatistics;
   constructor(
     createShortenedUrlService: CreateShortenedUrlService,
     getUrlByShortCodeService: GetUrlByShortCodeService,
+    getUrlStatisticsService: GetUrlStatisticsService,
   ) {
     this.createShortenedUrlService = createShortenedUrlService;
     this.getUrlByShortCodeService = getUrlByShortCodeService;
+    this.getUrlStatisticsService = getUrlStatisticsService;
   }
 
   @Post()
@@ -43,10 +49,11 @@ export class UrlController {
   }
 
   @Get('stats/:shortCode')
+  @AuthorizationRequired()
   async getStats(
     @Param('shortCode') shortCode: string,
-    @Headers('authorization') _authorization: string,
+    @Headers('authorization') authorization: string,
   ): Promise<Url> {
-    return this.getUrlByShortCodeService.get(shortCode);
+    return this.getUrlStatisticsService.get(shortCode, authorization);
   }
 }
