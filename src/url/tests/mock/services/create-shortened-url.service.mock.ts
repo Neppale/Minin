@@ -17,6 +17,7 @@ export class CreateShortenedUrlServiceMock implements CreateShortenedUrl {
     createdAt: new Date(),
     updatedAt: new Date(),
     clicks: 1,
+    userId: 1,
   };
 
   async create(_url: string): Promise<Url> {

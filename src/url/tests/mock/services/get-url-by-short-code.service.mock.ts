@@ -13,6 +13,7 @@ export class GetUrlByShortCodeServiceMock implements GetUrlByShortCode {
     createdAt: new Date(),
     updatedAt: new Date(),
     clicks: 1,
+    userId: 1,
   };
 
   async get(_shortCode: string): Promise<Url> {
