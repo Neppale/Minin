@@ -1,6 +1,6 @@
-# Minify
+# Minin
 
-Minify is a simple URL shortening service built using Node.js and PostgreSQL. It provides three endpoints - for shortening, redirecting, and retrieving statistics for shortened URLs. The service is implemented using the NestJS framework.
+Minin is a simple URL shortening service built using Node.js and PostgreSQL. It provides three endpoints - for shortening, redirecting, and retrieving statistics for shortened URLs. The service is implemented using the NestJS framework.
 
 ## Endpoints
 
