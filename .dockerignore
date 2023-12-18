@@ -1,0 +1,11 @@
+# Git repository and CI files
+.gitignore
+.gitmodules
+.github
+README.md
+
+# Development files
+.editorconfig
+docker-compose.yml
+Dockerfile
+logs
