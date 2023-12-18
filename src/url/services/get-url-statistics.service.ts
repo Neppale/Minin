@@ -21,13 +21,14 @@ export class GetUrlStatisticsService implements GetUrlStatistics {
     if (!url)
       throw new NotFoundException({ message: 'This URL does not exist.' });
 
-    const userToken = jwt.decode(authorization) as {
+    const token = authorization.split(' ')[1];
+    const userToken = jwt.decode(token) as {
       id: number;
       exp: number;
       iat: number;
     };
 
-    if (userToken.id !== url.userId) {
+    if (userToken.id != url.userId) {
       throw new UnauthorizedException({
         message: 'You are not allowed to see the statistics of this URL.',
       });
