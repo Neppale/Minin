@@ -27,7 +27,7 @@ export class AuthenticateUserService implements AuthenticateUser {
       });
     }
 
-    const isPasswordValid = compare(password, user.password);
+    const isPasswordValid = await compare(password, user.password);
     if (!isPasswordValid) {
       throw new BadRequestException({
         message,
