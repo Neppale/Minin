@@ -37,3 +37,7 @@ lerna-debug.log*
 # Environment variables
 .env.local
 .env
+
+# Database
+*.sqlite3
+*.sqlite3-journal

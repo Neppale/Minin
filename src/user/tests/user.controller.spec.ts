@@ -31,7 +31,7 @@ function makeSut(): SutOutput {
 describe('UserController', () => {
   it('should call deactivateUserService.deactivate once', async () => {
     const { sut, deactivateUserServiceMock } = makeSut();
-    await sut.deactivate(1);
+    await sut.deactivate({ id: 1 }, 'any_token');
 
     expect(deactivateUserServiceMock.count).toBe(1);
   });

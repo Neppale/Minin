@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Headers } from '@nestjs/common';
 import { CreateUser } from './services/useCases/create-user';
 import { CreateUserService } from './services/create-user.service';
 import { DeactivateUserService } from './services/deactivate-user.service';
@@ -8,6 +8,8 @@ import { DeactivateUser } from './services/useCases/deactivate-user';
 import { User } from '@prisma/client';
 import { AuthenticateUserDto } from './models/authenticate-user.dto';
 import { CreateUserDto } from './models/create-user.dto';
+import { AuthorizationRequired } from '../utils/authorization-required.decorator';
+import { UserIdDto } from './models/user-id.dto';
 
 @Controller('user')
 export class UserController {
@@ -31,8 +33,12 @@ export class UserController {
   }
 
   @Delete(':id')
-  async deactivate(@Param('id') id: number): Promise<void> {
-    return this.deactivateUserService.deactivate(id);
+  @AuthorizationRequired()
+  async deactivate(
+    @Param() { id }: UserIdDto,
+    @Headers('authorization') authorization: string,
+  ): Promise<void> {
+    return this.deactivateUserService.deactivate(id, authorization);
   }
 
   @Post('authenticate')

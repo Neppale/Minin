@@ -11,7 +11,7 @@ export class LoadUserByEmailPrisma implements LoadUserByEmailRepository {
     this.prisma = prisma;
   }
   async load(email: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findFirst({
       where: {
         email,
         active: true,
