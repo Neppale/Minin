@@ -1,4 +1,4 @@
-import { RedisClientSetParams } from '../models/redis-client-set.params';
+import { RedisClientSetParams } from '../../models/redis-client-set.params';
 
 export interface RedisClient {
   set({ key, value }: RedisClientSetParams): Promise<void>;

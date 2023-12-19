@@ -2,7 +2,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Injectable, Inject } from '@nestjs/common';
 import { RedisClient } from './useCases/redis-client';
 import { Cache } from 'cache-manager';
-import { RedisClientSetParams } from './models/redis-client-set.params';
+import { RedisClientSetParams } from '../models/redis-client-set.params';
 
 @Injectable()
 export class RedisService implements RedisClient {
