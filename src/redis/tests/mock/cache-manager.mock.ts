@@ -11,15 +11,15 @@ export class CacheManagerMock {
     this.countAdd++;
     return;
   }
-  set(_key: string, _value: any): Promise<any> {
+  async set(_key: string, _value: any): Promise<any> {
     this.countSet++;
     return;
   }
-  get(_key: string): Promise<any> {
+  async get(_key: string): Promise<any> {
     this.countGet++;
     return;
   }
-  del(_key: string): Promise<any> {
+  async del(_key: string): Promise<any> {
     this.countDel++;
     return;
   }
@@ -38,7 +38,8 @@ export class CacheManagerMock {
     reset: jest.fn(),
     mset: jest.fn(),
     mget: jest.fn(),
-    keys: jest.fn(),
+    // (pattern?: string) => Promise<string[]>
+    keys: jest.fn(() => Promise.resolve(['any_key'])),
     mdel: jest.fn(),
     ttl: jest.fn(),
   };

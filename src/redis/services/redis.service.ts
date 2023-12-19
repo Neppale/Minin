@@ -15,7 +15,8 @@ export class RedisService implements RedisClient {
   async del(key: string): Promise<void> {
     if (key.includes('*')) {
       const keys: string[] = await this.cacheManager.store.keys(key);
-      return keys.forEach(async (el) => await this.cacheManager.del(el));
+      keys.forEach(async (el) => await this.cacheManager.del(el));
+      return;
     }
 
     await this.cacheManager.del(key);
