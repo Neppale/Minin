@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { UrlModule } from './url/url.module';
 import { UserModule } from './user/user.module';
 import { AuthorizationRequiredGuard } from './utils/guards/authorization-required.guard';
-import { RedisModule } from './utils/redis/redis.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { CacheInterceptor } from '@nestjs/cache-manager';
+import { AuthorizationAwareCacheInterceptor } from './utils/interceptors/authorization-aware-cache.interceptor';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [UrlModule, UserModule, RedisModule],
@@ -16,7 +16,7 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
+      useClass: AuthorizationAwareCacheInterceptor,
     },
   ],
 })
