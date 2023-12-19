@@ -13,8 +13,6 @@ export class AuthorizationRequiredGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    if (process.env.ENV === 'LOCAL') return true;
-
     const isAuthorizationRequired = this.reflector.get<boolean>(
       AUTHORIZATION_REQUIRED_KEY,
       context.getHandler(),
