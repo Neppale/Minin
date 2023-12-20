@@ -14,6 +14,7 @@ export class GetUrlStatisticsServiceMock implements GetUrlStatisticsService {
     shortCode: 'any_short_code',
     clicks: 1,
     userId: 1,
+    active: true,
   };
 
   async get(_shortCode: string, _authorization: string): Promise<Url> {

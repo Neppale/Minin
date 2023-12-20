@@ -1,12 +1,19 @@
-services:
-  redis:
-    container_name: cache
-    image: redis
-    ports:
-      - 6379:6379
-    volumes:
-      - redis:/data
+version: '3'
 
-volumes:
+services:
+  postgres:
+    image: postgres
+    container_name: database
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: minin
+    ports:
+      - '5432:5432'
+
   redis:
-    driver: local
+    image: redis
+    container_name: cache
+    ports:
+      - '6379:6379'
+    command: redis-server --bind 0.0.0.0
