@@ -13,9 +13,61 @@ export class CreateClickDataFromRequestPrisma
     this.prisma = prisma;
   }
 
-  create(click: Click): Promise<Click> {
-    return this.prisma.click.create({
-      data: click,
+  async create(
+    {
+      ip,
+      browser,
+      operationalSystem,
+      device,
+      deviceVendor,
+      deviceModel,
+      platform,
+      referrer,
+      userAgent,
+      asn,
+      city,
+      country,
+      latitude,
+      longitude,
+      locationRadius,
+      postalCode,
+      region,
+      timezone,
+      tags,
+      isp,
+      location,
+    }: Click,
+    shortCode: string,
+  ): Promise<Click> {
+    return await this.prisma.click.create({
+      data: {
+        ip,
+        browser,
+        operationalSystem,
+        device,
+        deviceVendor,
+        deviceModel,
+        platform,
+        referrer,
+        userAgent,
+        asn,
+        city,
+        country,
+        latitude,
+        longitude,
+        locationRadius,
+        postalCode,
+        region,
+        timezone,
+        tags,
+        isp,
+        location,
+        url: {
+          connect: {
+            shortCode,
+          },
+        },
+      },
     });
   }
 }

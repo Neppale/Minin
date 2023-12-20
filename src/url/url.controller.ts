@@ -7,6 +7,7 @@ import {
   Param,
   Res,
   Headers,
+  Req,
 } from '@nestjs/common';
 import { CreateShortenedUrl } from './services/useCases/create-shortened-url';
 import { CreateShortenedUrlService } from './services/create-shortened-url.service';
@@ -14,23 +15,25 @@ import { CreateShortenedUrlDto } from './models/dto/create-shortened-url.dto';
 import { Url } from '@prisma/client';
 import { GetUrlByShortCode } from './services/useCases/get-url-by-short-code';
 import { GetUrlByShortCodeService } from './services/get-url-by-short-code.service';
-import { Response } from 'express';
 import { AuthorizationRequired } from '../utils/authorization-required.decorator';
 import { GetUrlStatistics } from './services/useCases/get-url-statistics';
 import { GetUrlStatisticsService } from './services/get-url-statistics.service';
+import { RedirectToUrl } from './services/useCases/redirect-to-url';
+import { RedirectToUrlService } from './services/redirect-to-url.service';
+import { Request, Response } from 'express';
 
 @Controller()
 export class UrlController {
   createShortenedUrlService: CreateShortenedUrl;
-  getUrlByShortCodeService: GetUrlByShortCode;
+  redirectToUrlService: RedirectToUrl;
   getUrlStatisticsService: GetUrlStatistics;
   constructor(
     createShortenedUrlService: CreateShortenedUrlService,
-    getUrlByShortCodeService: GetUrlByShortCodeService,
+    redirectToUrlService: RedirectToUrlService,
     getUrlStatisticsService: GetUrlStatisticsService,
   ) {
     this.createShortenedUrlService = createShortenedUrlService;
-    this.getUrlByShortCodeService = getUrlByShortCodeService;
+    this.redirectToUrlService = redirectToUrlService;
     this.getUrlStatisticsService = getUrlStatisticsService;
   }
 
@@ -42,10 +45,14 @@ export class UrlController {
   @Get(':shortCode')
   async get(
     @Param('shortCode') shortCode: string,
-    @Res() res: Response,
+    @Req() request: Request,
+    @Res() response: Response,
   ): Promise<void> {
-    const url = await this.getUrlByShortCodeService.get(shortCode);
-    res.redirect(url.originalUrl);
+    await this.redirectToUrlService.redirect({
+      shortCode,
+      request,
+      response,
+    });
   }
 
   @Get('stats/:shortCode')

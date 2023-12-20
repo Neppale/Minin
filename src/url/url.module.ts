@@ -10,6 +10,7 @@ import { GetUrlStatisticsService } from './services/get-url-statistics.service';
 import { CreateClickDataFromRequestPrisma } from './repository/create-click-data-from-request.prisma';
 import { GetLocationDataFromIpService } from './services/get-location-data-from-ip.service';
 import { RedirectToUrlService } from './services/redirect-to-url.service';
+import { CreateClickDataFromRequestService } from './services/create-click-data-from-request.service';
 
 @Module({
   imports: [],
@@ -23,7 +24,7 @@ import { RedirectToUrlService } from './services/redirect-to-url.service';
     GetUrlByShortCodeService,
     GetUrlStatisticsService,
     CreateClickDataFromRequestPrisma,
-    CreateClickDataFromRequestPrisma,
+    CreateClickDataFromRequestService,
     GetLocationDataFromIpService,
     RedirectToUrlService,
   ],

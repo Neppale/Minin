@@ -26,37 +26,55 @@ export class CreateClickDataFromRequestService
   async create(request: Request): Promise<void> {
     const userAgent = request.headers['user-agent'];
     const userAgentParser = new UAParser(userAgent);
-    const userAgentData = userAgentParser.getResult();
+    const { device, browser, engine, os } = userAgentParser.getResult();
 
-    const ip = request.ip;
-    const locationData = await this.getLocationDataFromIpService.get(ip);
+    const ip = '191.205.50.52';
+    const {
+      asn,
+      city,
+      country,
+      isp,
+      latitude,
+      longitude,
+      locationRadius,
+      postalCode,
+      region,
+      timezone,
+      location,
+    } = await this.getLocationDataFromIpService.get(ip);
 
     const clickData: Click = {
-      ip: request.ip,
-      browser: `${userAgentData.browser.name} ${userAgentData.browser.version}`,
-      operationalSystem: `${userAgentData.os.name} ${userAgentData.os.version}`,
-      device: userAgentData.device.type,
-      deviceVendor: userAgentData.device.vendor,
-      deviceModel: userAgentData.device.model,
-      platform: userAgentData.engine.name,
+      ip,
+      browser: `${browser?.name} ${browser?.version}`,
+      operationalSystem: `${os?.name} ${os?.version}`,
+      device: device?.type,
+      deviceVendor: device?.vendor,
+      deviceModel: device?.model,
+      platform: engine?.name,
       referrer: request.headers.referer,
       userAgent: request.headers['user-agent'],
-      asn: locationData.asn,
-      city: locationData.city,
-      country: locationData.country,
-      latitude: Number(locationData.latitude),
-      longitude: Number(locationData.longitude),
-      locationRadius: locationData.locationRadius,
+      location,
+      isp,
+      asn,
+      city,
+      country,
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+      locationRadius,
       createdAt: new Date(),
-      postalCode: locationData.postalCode,
-      region: locationData.region,
+      postalCode,
+      region,
       tags: [], // TODO: implement tag system based on referrer. ex: social media, search engine, etc
-      timezone: locationData.timezone,
+      timezone,
       urlId: undefined,
       id: undefined,
       updatedAt: undefined,
     };
+    const shortCode = request.url.split('/').pop();
 
-    await this.createClickDataFromRequestRepository.create(clickData);
+    await this.createClickDataFromRequestRepository.create(
+      clickData,
+      shortCode,
+    );
   }
 }

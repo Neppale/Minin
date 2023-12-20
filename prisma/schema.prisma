@@ -35,23 +35,25 @@ model Click {
   updatedAt         DateTime @updatedAt
   urlId             Int
   url               Url      @relation(fields: [urlId], references: [id])
-  ip                String
-  referrer          String
-  userAgent         String
-  operationalSystem String
-  browser           String
-  device            String
-  deviceVendor      String
-  deviceModel       String
-  platform          String
-  country           String
-  region            String
-  city              String
-  postalCode        String
-  latitude          Float
-  longitude         Float
-  locationRadius    String
-  timezone          String
-  asn               String
+  ip                String?
+  referrer          String?
+  userAgent         String?
+  operationalSystem String?
+  browser           String?
+  device            String?
+  deviceVendor      String?
+  deviceModel       String?
+  platform          String?
+  country           String?
+  region            String?
+  city              String?
+  postalCode        String?
+  latitude          Float?
+  longitude         Float?
+  locationRadius    String?
+  timezone          String?
+  asn               String?
+  isp               String?
+  location          String?
   tags              String[]
 }

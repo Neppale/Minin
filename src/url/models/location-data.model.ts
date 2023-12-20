@@ -8,18 +8,32 @@ export class LocationData {
   asn: string;
   postalCode: string;
   locationRadius: string;
+  isp: string;
+  location: string;
 
-  constructor(locationData: GeoPluginLocationData) {
-    this.country = locationData.geoplugin_countryName;
-    this.region = locationData.geoplugin_region;
-    this.city = locationData.geoplugin_city;
-    this.latitude = locationData.geoplugin_latitude;
-    this.longitude = locationData.geoplugin_longitude;
-    this.timezone = locationData.geoplugin_timezone;
-    this.asn = locationData.geoplugin_areaCode;
-    this.postalCode = locationData.geoplugin_dmaCode;
-    this.locationRadius = locationData.geoplugin_locationAccuracyRadius;
+  constructor(
+    geoPluginLocationData: GeoPluginLocationData,
+    whatIsMyIpAddressLocationData: WhatIsMyIpAddressLocationData,
+  ) {
+    this.country = geoPluginLocationData.geoplugin_countryName;
+    this.region = geoPluginLocationData.geoplugin_region;
+    this.city = geoPluginLocationData.geoplugin_city;
+    this.latitude = geoPluginLocationData.geoplugin_latitude;
+    this.longitude = geoPluginLocationData.geoplugin_longitude;
+    this.timezone = geoPluginLocationData.geoplugin_timezone;
+    this.asn = geoPluginLocationData.geoplugin_areaCode;
+    this.postalCode = geoPluginLocationData.geoplugin_dmaCode;
+    this.locationRadius =
+      geoPluginLocationData.geoplugin_locationAccuracyRadius;
+    this.isp = whatIsMyIpAddressLocationData.isp;
+    this.location = whatIsMyIpAddressLocationData.geo;
   }
+}
+
+export interface WhatIsMyIpAddressLocationData {
+  ip: string;
+  geo: string;
+  isp: string;
 }
 
 export interface GeoPluginLocationData {
