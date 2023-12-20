@@ -36,12 +36,13 @@ model Click {
   urlId             Int
   url               Url      @relation(fields: [urlId], references: [id])
   ip                String
-  location          String
   referrer          String
   userAgent         String
   operationalSystem String
   browser           String
   device            String
+  deviceVendor      String
+  deviceModel       String
   platform          String
   country           String
   region            String
@@ -49,9 +50,8 @@ model Click {
   postalCode        String
   latitude          Float
   longitude         Float
+  locationRadius    String
   timezone          String
   asn               String
-  organization      String
-  type              String
   tags              String[]
 }

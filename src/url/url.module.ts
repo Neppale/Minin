@@ -7,6 +7,9 @@ import { UrlController } from './url.controller';
 import { GetUrlByShortCodeService } from './services/get-url-by-short-code.service';
 import { GetUrlByShortCodePrisma } from './repository/get-url-by-short-code.prisma';
 import { GetUrlStatisticsService } from './services/get-url-statistics.service';
+import { CreateClickDataFromRequestPrisma } from './repository/create-click-data-from-request.prisma';
+import { GetLocationDataFromIpService } from './services/get-location-data-from-ip.service';
+import { RedirectToUrlService } from './services/redirect-to-url.service';
 
 @Module({
   imports: [],
@@ -19,6 +22,10 @@ import { GetUrlStatisticsService } from './services/get-url-statistics.service';
     GetUrlByShortCodePrisma,
     GetUrlByShortCodeService,
     GetUrlStatisticsService,
+    CreateClickDataFromRequestPrisma,
+    CreateClickDataFromRequestPrisma,
+    GetLocationDataFromIpService,
+    RedirectToUrlService,
   ],
 })
 export class UrlModule {}
