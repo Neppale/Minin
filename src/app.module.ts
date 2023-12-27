@@ -5,9 +5,10 @@ import { AuthorizationRequiredGuard } from './utils/guards/authorization-require
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthorizationAwareCacheInterceptor } from './utils/interceptors/authorization-aware-cache.interceptor';
 import { RedisModule } from './redis/redis.module';
+import { HealthCheckModule } from './health-check/health-check.module';
 
 @Module({
-  imports: [UrlModule, UserModule, RedisModule],
+  imports: [UrlModule, UserModule, RedisModule, HealthCheckModule],
   controllers: [],
   providers: [
     {

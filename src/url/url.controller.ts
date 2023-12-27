@@ -13,8 +13,6 @@ import { CreateShortenedUrl } from './services/useCases/create-shortened-url';
 import { CreateShortenedUrlService } from './services/create-shortened-url.service';
 import { CreateShortenedUrlDto } from './models/dto/create-shortened-url.dto';
 import { Url } from '@prisma/client';
-import { GetUrlByShortCode } from './services/useCases/get-url-by-short-code';
-import { GetUrlByShortCodeService } from './services/get-url-by-short-code.service';
 import { AuthorizationRequired } from '../utils/authorization-required.decorator';
 import { GetUrlStatistics } from './services/useCases/get-url-statistics';
 import { GetUrlStatisticsService } from './services/get-url-statistics.service';
