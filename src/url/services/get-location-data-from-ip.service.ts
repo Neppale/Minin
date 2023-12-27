@@ -5,41 +5,40 @@ import {
   LocationData,
 } from '../models/location-data.model';
 import axios from 'axios';
+import { load } from 'cheerio';
 
 @Injectable()
 export class GetLocationDataFromIpService implements GetLocationDataFromIp {
   async get(ip: string): Promise<LocationData> {
-    // TODo: catch exceptions
+    // TODO: catch exceptions
     const geoPluginResponse = (
       await axios.get<GeoPluginLocationData>(
         `http://www.geoplugin.net/json.gp?ip=${ip}`,
       )
     ).data;
 
-    const WhatIsMyIpResponse = (
-      await axios.post<{
-        ip: string;
-        geo: string;
-        isp: string;
-      }>('https://api.whatismyip.com/wimi.php', '', {
-        headers: {
-          Referer: 'https://www.whatismyip.com/',
-          Origin: 'https://www.whatismyip.com',
-          DNT: '1',
-          'Sec-GPC': '1',
-          Connection: 'keep-alive',
-          'Sec-Fetch-Dest': 'empty',
-          'Sec-Fetch-Mode': 'cors',
-          'Sec-Fetch-Site': 'same-site',
-          'Content-Length': '0',
-        },
-      })
-    ).data;
+    const response = (await axios.get(`https://www.whtop.com/tools.ip/${ip}`))
+      .data;
+    const rawWhtopHtml = response;
 
-    const locationData = new LocationData(
-      geoPluginResponse,
-      WhatIsMyIpResponse,
-    );
+    const $ = load(rawWhtopHtml);
+    const location = $('tr:contains("City") td:last-child').text().trim();
+    const isp = $('tr:contains("ISP Name / URL") td:last-child').text().trim();
+
+    const locationData: LocationData = {
+      asn: geoPluginResponse.geoplugin_areaCode,
+      city: geoPluginResponse.geoplugin_city,
+      country: geoPluginResponse.geoplugin_countryName,
+      isp,
+      latitude: geoPluginResponse.geoplugin_latitude,
+      location,
+      locationRadius: geoPluginResponse.geoplugin_locationAccuracyRadius,
+      longitude: geoPluginResponse.geoplugin_longitude,
+      postalCode: geoPluginResponse.geoplugin_dmaCode,
+      region: geoPluginResponse.geoplugin_region,
+      timezone: geoPluginResponse.geoplugin_timezone,
+    };
+
     return locationData;
   }
 }
