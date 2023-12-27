@@ -1,36 +1,59 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// This database is for a URL shortener service.
-// It stores the original URL and the shortened URL.
-
 model Url {
-  id           Int      @id @default(autoincrement())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  originalUrl  String   @unique
-  shortCode    String   @unique
-  clicks       Int      @default(0)
-  userId       Int?
-  user         User?    @relation(fields: [userId], references: [id])
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  originalUrl String   @unique
+  shortCode   String   @unique
+  userId      Int?
+  user        User?    @relation(fields: [userId], references: [id])
+  clicks      Click[]
+  active      Boolean  @default(true)
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  email        String   
-  password     String
-  active       Boolean  @default(true)
-  urls         Url[]
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String
+  password  String
+  active    Boolean  @default(true)
+  urls      Url[]
 }
 
+model Click {
+  id                Int      @id @default(autoincrement())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  urlId             Int
+  url               Url      @relation(fields: [urlId], references: [id])
+  ip                String?
+  referrer          String?
+  userAgent         String?
+  operationalSystem String?
+  browser           String?
+  device            String?
+  deviceVendor      String?
+  deviceModel       String?
+  platform          String?
+  country           String?
+  region            String?
+  city              String?
+  postalCode        String?
+  latitude          Float?
+  longitude         Float?
+  locationRadius    String?
+  timezone          String?
+  asn               String?
+  isp               String?
+  location          String?
+  tags              String[]
+}

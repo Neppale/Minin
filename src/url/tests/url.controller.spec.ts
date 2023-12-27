@@ -1,29 +1,29 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { UrlController } from '../url.controller';
 import { CreateShortenedUrlServiceMock } from './mock/services/create-shortened-url.service.mock';
-import { GetUrlByShortCodeServiceMock } from './mock/services/get-url-by-short-code.service.mock';
+import { RedirectToUrlServiceMock } from './mock/services/redirect-to-url.service.mock';
 import { GetUrlStatisticsServiceMock } from './mock/services/get-url-statistics.service.mock';
 
 type SutOutput = {
   sut: UrlController;
-  getUrlByShortCodeServiceMock: GetUrlByShortCodeServiceMock;
+  redirectToUrlServiceMock: RedirectToUrlServiceMock;
   createShortenedUrlServiceMock: CreateShortenedUrlServiceMock;
   getUrlStatisticsServiceMock: GetUrlStatisticsServiceMock;
 };
 
 const makeSut = (): SutOutput => {
-  const getUrlByShortCodeServiceMock = new GetUrlByShortCodeServiceMock();
+  const redirectToUrlServiceMock = new RedirectToUrlServiceMock();
   const createShortenedUrlServiceMock = new CreateShortenedUrlServiceMock();
   const getUrlStatisticsServiceMock = new GetUrlStatisticsServiceMock();
   const sut = new UrlController(
     createShortenedUrlServiceMock,
-    getUrlByShortCodeServiceMock,
+    redirectToUrlServiceMock,
     getUrlStatisticsServiceMock,
   );
 
   return {
     sut,
-    getUrlByShortCodeServiceMock,
+    redirectToUrlServiceMock,
     createShortenedUrlServiceMock,
     getUrlStatisticsServiceMock,
   };
@@ -38,22 +38,24 @@ describe('UrlController', () => {
     expect(createShortenedUrlServiceMock.createCount).toBe(1);
   });
 
-  it('should call getOriginalUrlByShortCodeService.get once', () => {
-    const { sut, getUrlByShortCodeServiceMock } = makeSut();
+  it('should call redirectToUrlServiceMock.get once', () => {
+    const { sut, redirectToUrlServiceMock } = makeSut();
     const response: Response = {
       redirect: jest.fn(),
     } as unknown as Response<any>;
+    const request: Request = {
+      headers: {},
+    } as unknown as Request<any>;
 
-    sut.get('abc123', response);
-
-    expect(getUrlByShortCodeServiceMock.count).toBe(1);
+    sut.get('abc123', request, response);
+    expect(redirectToUrlServiceMock.count).toBe(1);
   });
+});
 
-  it('should call getUrlStatisticsService.get once using getStats', () => {
-    const { sut, getUrlStatisticsServiceMock } = makeSut();
+it('should call getUrlStatisticsService.get once using getStats', () => {
+  const { sut, getUrlStatisticsServiceMock } = makeSut();
 
-    sut.getStats('abc123', 'Bearer token');
+  sut.getStats('abc123', 'Bearer token');
 
-    expect(getUrlStatisticsServiceMock.count).toBe(1);
-  });
+  expect(getUrlStatisticsServiceMock.count).toBe(1);
 });

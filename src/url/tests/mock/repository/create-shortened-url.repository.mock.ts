@@ -16,6 +16,7 @@ export class CreateShortenedUrlRepositoryMock
     updatedAt: new Date(),
     clicks: 1,
     userId: 1,
+    active: true,
   };
 
   async create(_params: CreateShortenedUrlParams): Promise<Url> {
