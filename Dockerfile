@@ -1,16 +1,20 @@
-FROM node:alpine3.16
+# Base image
+FROM node:18-alpine
 
-WORKDIR /app
+# Create app directory
+WORKDIR /usr/src/app
 
-USER 1000
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
 
-COPY --chown=node:node . ./
+# Install app dependencies
+RUN npm install
 
-RUN chmod +x /app/docker-entrypoint.sh
+# Bundle app source
+COPY . .
 
-RUN npm install && \
-    npm run build
+# Creates a "dist" folder with the production build
+RUN npm run build
 
-EXPOSE 5000
-
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+# Start the server using the production build
+CMD [ "node", "dist/main.js" ]
