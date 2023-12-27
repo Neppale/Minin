@@ -12,18 +12,39 @@ export class GetLocationDataFromIpService implements GetLocationDataFromIp {
   async get(ip: string): Promise<LocationData> {
     // TODO: catch exceptions
     const geoPluginResponse = (
-      await axios.get<GeoPluginLocationData>(
-        `http://www.geoplugin.net/json.gp?ip=${ip}`,
-      )
+      await axios
+        .get<GeoPluginLocationData>(`http://www.geoplugin.net/json.gp?ip=${ip}`)
+        .catch(() => {
+          return {
+            data: {
+              geoplugin_areaCode: '',
+              geoplugin_city: '',
+              geoplugin_countryName: '',
+              geoplugin_latitude: '',
+              geoplugin_locationAccuracyRadius: '',
+              geoplugin_longitude: '',
+              geoplugin_dmaCode: '',
+              geoplugin_region: '',
+              geoplugin_timezone: '',
+            },
+          };
+        })
     ).data;
 
-    const response = (await axios.get(`https://www.whtop.com/tools.ip/${ip}`))
-      .data;
+    const response = (
+      await axios.get(`https://www.whtop.com/tools.ip/${ip}`).catch(() => {
+        return {
+          data: '',
+        };
+      })
+    ).data;
     const rawWhtopHtml = response;
 
-    const $ = load(rawWhtopHtml);
-    const location = $('tr:contains("City") td:last-child').text().trim();
-    const isp = $('tr:contains("ISP Name / URL") td:last-child').text().trim();
+    const cheerio = load(rawWhtopHtml);
+    const location = cheerio('tr:contains("City") td:last-child').text().trim();
+    const isp = cheerio('tr:contains("ISP Name / URL") td:last-child')
+      .text()
+      .trim();
 
     const locationData: LocationData = {
       asn: geoPluginResponse.geoplugin_areaCode,
