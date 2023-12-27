@@ -21,6 +21,7 @@ import { GetUrlStatisticsService } from './services/get-url-statistics.service';
 import { RedirectToUrl } from './services/useCases/redirect-to-url';
 import { RedirectToUrlService } from './services/redirect-to-url.service';
 import { Request, Response } from 'express';
+import { UrlStatistics } from './models/url-statistics.model';
 
 @Controller()
 export class UrlController {
@@ -60,7 +61,7 @@ export class UrlController {
   async getStats(
     @Param('shortCode') shortCode: string,
     @Headers('authorization') authorization: string,
-  ): Promise<Url> {
+  ): Promise<UrlStatistics> {
     return this.getUrlStatisticsService.get(shortCode, authorization);
   }
 }

@@ -1,18 +1,25 @@
 import { GetUrlStatisticsService } from '../../services/get-url-statistics.service';
 import { GetUrlByShortCodeRepositoryMock } from '../mock/repository/get-url-by-short-code.repository.mock';
+import { GetUrlStatisticsRepositoryMock } from '../mock/repository/get-url-statistics.repository.mock';
 
 type SutOutput = {
   sut: GetUrlStatisticsService;
   getUrlByShortCodeRepositoryMock: GetUrlByShortCodeRepositoryMock;
+  getUrlStatisticsRepositoryMock: GetUrlStatisticsRepositoryMock;
 };
 
 const makeSut = (): SutOutput => {
   const getUrlByShortCodeRepositoryMock = new GetUrlByShortCodeRepositoryMock();
-  const sut = new GetUrlStatisticsService(getUrlByShortCodeRepositoryMock);
+  const getUrlStatisticsRepositoryMock = new GetUrlStatisticsRepositoryMock();
+  const sut = new GetUrlStatisticsService(
+    getUrlByShortCodeRepositoryMock,
+    getUrlStatisticsRepositoryMock,
+  );
 
   return {
     sut,
     getUrlByShortCodeRepositoryMock,
+    getUrlStatisticsRepositoryMock,
   };
 };
 
@@ -48,7 +55,17 @@ describe('GetUrlStatisticsService', () => {
     await expect(promise).rejects.toThrow();
   });
 
-  it('should return the url', async () => {
+  it('should call getUrlStatisticsRepository.get once', async () => {
+    const { sut, getUrlStatisticsRepositoryMock } = makeSut();
+    await sut.get(
+      'abc123',
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJleHAiOjk5OTk5OTk5OTksImlhdCI6MTUxNjIzOTAyMn0.T4XSv7tPeAxm7UcH0lTXrSMtuuf8fYIVWkdVO7bIZSI',
+    );
+
+    expect(getUrlStatisticsRepositoryMock.count).toBe(1);
+  });
+
+  it('should return the url statistics', async () => {
     const { sut } = makeSut();
 
     const url = await sut.get(

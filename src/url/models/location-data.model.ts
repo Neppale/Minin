@@ -12,12 +12,6 @@ export class LocationData {
   location: string;
 }
 
-export interface WhatIsMyIpAddressLocationData {
-  ip: string;
-  geo: string;
-  isp: string;
-}
-
 export interface GeoPluginLocationData {
   geoplugin_request: string;
   geoplugin_status: number;

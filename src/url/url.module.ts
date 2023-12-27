@@ -11,6 +11,7 @@ import { CreateClickDataFromRequestPrisma } from './repository/create-click-data
 import { GetLocationDataFromIpService } from './services/get-location-data-from-ip.service';
 import { RedirectToUrlService } from './services/redirect-to-url.service';
 import { CreateClickDataFromRequestService } from './services/create-click-data-from-request.service';
+import { GetUrlStatisticsPrisma } from './repository/get-url-statistics.prisma';
 
 @Module({
   imports: [],
@@ -27,6 +28,7 @@ import { CreateClickDataFromRequestService } from './services/create-click-data-
     CreateClickDataFromRequestService,
     GetLocationDataFromIpService,
     RedirectToUrlService,
+    GetUrlStatisticsPrisma,
   ],
 })
 export class UrlModule {}
