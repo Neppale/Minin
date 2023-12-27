@@ -24,11 +24,7 @@ export class CreateClickDataFromRequestService
   }
 
   async create(request: Request): Promise<void> {
-    const userAgent = request.headers['user-agent'];
-    const userAgentParser = new UAParser(userAgent);
-    const { device, browser, engine, os } = userAgentParser.getResult();
-
-    const ip = '191.205.50.52';
+    const ip = request.socket.remoteAddress || request.ip;
     const {
       asn,
       city,
@@ -43,6 +39,9 @@ export class CreateClickDataFromRequestService
       location,
     } = await this.getLocationDataFromIpService.get(ip);
 
+    const userAgent = request.headers['user-agent'];
+    const userAgentParser = new UAParser(userAgent);
+    const { device, browser, engine, os } = userAgentParser.getResult();
     const clickData: Click = {
       ip,
       browser: `${browser?.name} ${browser?.version}`,
