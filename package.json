@@ -2,7 +2,7 @@
   "name": "minin",
   "version": "1.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "bun test",
     "lint": "eslint .",
     "format": "prettier --write .",
     "prettier": "prettier --check .",
