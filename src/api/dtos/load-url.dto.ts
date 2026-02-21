@@ -10,5 +10,6 @@ export const LoadUrlDto = t.Object({
         description: "This is the ID of the URL to redirect to",
       },
     ],
+    pattern: "[a-zA-Z0-9]{5,10}",
   }),
 });

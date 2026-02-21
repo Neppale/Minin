@@ -1,4 +1,4 @@
-import { Elysia, t } from "elysia";
+import { Elysia, NotFoundError } from "elysia";
 import { redirect } from "elysia";
 import { UrlRepository } from "../infra/database/drizzle/url.repository";
 import { CreateUrlDto } from "./dtos/create-url.dto";
@@ -7,15 +7,13 @@ import { CreateUrl } from "../core/useCases/create-url";
 import { LoadUrl } from "../core/useCases/load-url";
 import { drizzleClient } from "../infra/database/drizzle/client";
 import { redisClient as cache } from "../infra/cache/redis/client";
-import { RabbitmqAdapter } from "../infra/queue/rabbitmq/rabbitmq.adapter";
 import { Healthcheck } from "../core/useCases/healthcheck";
 import { cors } from "@elysiajs/cors";
 import { staticPlugin } from "@elysiajs/static";
 
-const queueAdapter = new RabbitmqAdapter();
 const urlRepository = new UrlRepository(drizzleClient);
-const createUrl = new CreateUrl(cache, queueAdapter);
-const loadUrl = new LoadUrl(urlRepository, cache);
+const createUrl = new CreateUrl(urlRepository, cache);
+const loadUrl = new LoadUrl(urlRepository);
 const healthcheck = Healthcheck.getInstance();
 
 const app = new Elysia()
@@ -36,9 +34,11 @@ const app = new Elysia()
     .get(
       "/:id",
       async ({ params }) => {
-        if (!/^[a-zA-Z0-9]{5,10}$/.test(params.id)) return;
+        const cachedOriginalUrl = await cache.get(params.id);
+        if (cachedOriginalUrl) return redirect(cachedOriginalUrl, 307);
         const url = await loadUrl.load(params.id);
-        return redirect(url.originalUrl, 307);
+        if (url) return redirect(url.originalUrl, 307);
+        throw new NotFoundError("The URL you are looking for does not exist");
       },
       {
         params: LoadUrlDto,
@@ -56,13 +56,11 @@ const app = new Elysia()
 
 process.on("SIGTERM", async () => {
   console.log("🛑 API shutting down...");
-  await queueAdapter.close();
   process.exit(0);
 });
 
 process.on("SIGINT", async () => {
   console.log("🛑 API shutting down...");
-  await queueAdapter.close();
   process.exit(0);
 });
 

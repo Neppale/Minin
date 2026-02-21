@@ -3,16 +3,12 @@ import { urlsTable } from "./schema";
 import { Url } from "../../../core/entities/url.entity";
 import { DrizzleDB } from "./client";
 import { and, eq, gt } from "drizzle-orm";
-import { UrlRepositoryPort } from "../../../core/ports/url-repository.port";
-
-
+import { UrlRepositoryPort, CreateUrlData } from "../../../core/ports/url-repository.port";
 
 export class UrlRepository implements UrlRepositoryPort {
+  constructor(private drizzle: DrizzleDB) {}
 
-  constructor(private drizzle: DrizzleDB) {
-  }
-
-  async create(data: { id: string; originalUrl: string; expirationDate?: Date }): Promise<Url> {
+  async create(data: CreateUrlData): Promise<Url> {
     const result = await this.drizzle.insert(urlsTable).values({
       id: data.id,
       original_url: data.originalUrl,
