@@ -1,0 +1,22 @@
+name: Update Submodule
+on:
+  repository_dispatch:
+    types: [update-submodule]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Update Submodule
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git submodule update --remote frontend
+          git commit -am "chore: update frontend submodule"
+          git push

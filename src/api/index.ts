@@ -10,6 +10,7 @@ import { redisClient as cache } from "../infra/cache/redis/client";
 import { RabbitmqAdapter } from "../infra/queue/rabbitmq/rabbitmq.adapter";
 import { Healthcheck } from "../core/useCases/healthcheck";
 import { cors } from "@elysiajs/cors";
+import { staticPlugin } from "@elysiajs/static";
 
 const queueAdapter = new RabbitmqAdapter();
 const urlRepository = new UrlRepository(drizzleClient);
@@ -19,28 +20,37 @@ const healthcheck = Healthcheck.getInstance();
 
 const app = new Elysia()
   .use(cors())
-  .get("/version", () => {
-    return healthcheck.getVersion();
-  })
-  .post(
-    "/",
-    async ({ body }) => {
-      return await createUrl.create(body.originalUrl, body.expirationDate);
-    },
-    {
-      body: CreateUrlDto,
-    }
+  .group("/api", app => app
+    .get("/version", () => {
+      return healthcheck.getVersion();
+    })
+    .post(
+      "/",
+      async ({ body }) => {
+        return await createUrl.create(body.originalUrl, body.expirationDate);
+      },
+      {
+        body: CreateUrlDto,
+      }
+    )
+    .get(
+      "/:id",
+      async ({ params }) => {
+        if (!/^[a-zA-Z0-9]{5,10}$/.test(params.id)) return;
+        const url = await loadUrl.load(params.id);
+        return redirect(url.originalUrl, 307);
+      },
+      {
+        params: LoadUrlDto,
+      }
+    )
   )
-  .get(
-    "/:id",
-    async ({ params }) => {
-      const url = await loadUrl.load(params.id);
-      return redirect(url.originalUrl, 307);
-    },
-    {
-      params: LoadUrlDto,
-    }
-  ).listen(3001);
+  .use(staticPlugin({
+    assets: 'frontend',
+    prefix: '/'
+  }))
+  .get('/', () => Bun.file('frontend/index.html'))
+  .listen(3001);
 
   console.log(`🚀 Minin.in is running on ${app.server?.url}`);
 
