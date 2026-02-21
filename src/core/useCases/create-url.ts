@@ -14,11 +14,10 @@ export class CreateUrl {
   ) {}
 
   async create(originalUrl: string, expirationDate?: Date): Promise<Url> {
-    let createdUrl: Url | null = null;
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
       const id = generateId(originalUrl);
       try {
-        createdUrl = await this.urlRepository.create({
+        const createdUrl = await this.urlRepository.create({
           id,
           originalUrl,
           expirationDate,
@@ -28,7 +27,8 @@ export class CreateUrl {
       } catch (error: unknown) {
         const formattedError = error as { code?: string };
         if (formattedError.code === "SQLITE_CONSTRAINT_PRIMARYKEY") {
-          if (attempt === MAX_ATTEMPTS - 1) throw new CreateAttemptsExceededError();
+          if (attempt === MAX_ATTEMPTS - 1)
+            throw new CreateAttemptsExceededError();
           continue;
         }
         throw error;

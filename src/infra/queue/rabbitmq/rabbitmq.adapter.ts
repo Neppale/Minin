@@ -30,9 +30,9 @@ export class RabbitmqAdapter implements QueuePort {
     }
   }
 
-  async addJob(name: string, data: Record<string, any>): Promise<void> {
+  async addJob(name: string, data: Record<string, unknown>): Promise<void> {
     await this.ensureConnection();
-    
+
     if (!this.channel) {
       throw new Error("Channel not initialized");
     }

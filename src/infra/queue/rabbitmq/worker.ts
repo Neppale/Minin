@@ -19,9 +19,11 @@ export const createWorker = async (repo: UrlRepository, cache: CachePort) => {
 
   channel.prefetch(10);
 
-  console.log(`👷 Worker connected to RabbitMQ. Waiting for messages in ${QUEUE_NAME}...`);
+  console.log(
+    `👷 Worker connected to RabbitMQ. Waiting for messages in ${QUEUE_NAME}...`
+  );
 
-  channel.consume(QUEUE_NAME, async (msg: any) => {
+  channel.consume(QUEUE_NAME, async (msg: amqp.ConsumeMessage | null) => {
     if (!msg) {
       return;
     }
@@ -32,19 +34,19 @@ export const createWorker = async (repo: UrlRepository, cache: CachePort) => {
 
       if (name === "persist-url") {
         console.log(`Processing Job: Saving URL ${data.id}`);
-        
+
         await repo.create({
           id: data.id,
           originalUrl: data.originalUrl,
           expirationDate: data.expirationDate,
         });
-        
+
         await cache.del(data.id);
         console.log(`Saved!`);
       }
 
       channel.ack(msg);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(`Job failed: ${error}`);
       channel.nack(msg, false, true);
     }

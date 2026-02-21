@@ -7,7 +7,8 @@ export const redisClient: CachePort = {
   get: async (key: string) => {
     return await client.get(key);
   },
-  set: async (key: string, value: string, ttl: number) => await client.set(key, value, "EX", ttl),
+  set: async (key: string, value: string, ttl: number) =>
+    await client.set(key, value, "EX", ttl),
   del: async (key: string) => await client.del(key),
 };
 

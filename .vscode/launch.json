@@ -1,39 +1,39 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Debug Minin.in API",
-            "command": "bun run debug:api",
-            "request": "launch",
-            "type": "node-terminal",
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "name": "Attach to Debug",
-            "request": "attach",
-            "type": "bun",
-            "url": "http://localhost:9229/debug",
-        },
-        {
-            "name": "Start Minin.in API",
-            "command": "bun run dev:api",
-            "request": "launch",
-            "type": "node-terminal",
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "name": "Start Minin.in Worker",
-            "command": "bun run dev:worker",
-            "request": "launch",
-            "type": "node-terminal",
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "name": "Debug Minin.in Worker",
-            "command": "bun run debug:worker",
-            "request": "launch",
-            "type": "node-terminal",
-            "cwd": "${workspaceFolder}"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Minin.in API",
+      "command": "bun run debug:api",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Attach to Debug",
+      "request": "attach",
+      "type": "bun",
+      "url": "http://localhost:9229/debug"
+    },
+    {
+      "name": "Start Minin.in API",
+      "command": "bun run dev:api",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Start Minin.in Worker",
+      "command": "bun run dev:worker",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Debug Minin.in Worker",
+      "command": "bun run debug:worker",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
 }

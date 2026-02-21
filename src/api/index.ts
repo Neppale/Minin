@@ -18,41 +18,44 @@ const healthcheck = Healthcheck.getInstance();
 
 const app = new Elysia()
   .use(cors())
-  .group("/api", app => app
-    .get("/version", () => {
-      return healthcheck.getVersion();
-    })
-    .post(
-      "/",
-      async ({ body }) => {
-        return await createUrl.create(body.originalUrl, body.expirationDate);
-      },
-      {
-        body: CreateUrlDto,
-      }
-    )
-    .get(
-      "/:id",
-      async ({ params }) => {
-        const cachedOriginalUrl = await cache.get(params.id);
-        if (cachedOriginalUrl) return redirect(cachedOriginalUrl, 307);
-        const url = await loadUrl.load(params.id);
-        if (url) return redirect(url.originalUrl, 307);
-        throw new NotFoundError("The URL you are looking for does not exist");
-      },
-      {
-        params: LoadUrlDto,
-      }
-    )
+  .group("/api", (app) =>
+    app
+      .get("/version", () => {
+        return healthcheck.getVersion();
+      })
+      .post(
+        "/",
+        async ({ body }) => {
+          return await createUrl.create(body.originalUrl, body.expirationDate);
+        },
+        {
+          body: CreateUrlDto,
+        }
+      )
+      .get(
+        "/:id",
+        async ({ params }) => {
+          const cachedOriginalUrl = await cache.get(params.id);
+          if (cachedOriginalUrl) return redirect(cachedOriginalUrl, 307);
+          const url = await loadUrl.load(params.id);
+          if (url) return redirect(url.originalUrl, 307);
+          throw new NotFoundError("The URL you are looking for does not exist");
+        },
+        {
+          params: LoadUrlDto,
+        }
+      )
   )
-  .use(staticPlugin({
-    assets: 'frontend',
-    prefix: '/'
-  }))
-  .get('/', () => Bun.file('frontend/index.html'))
+  .use(
+    staticPlugin({
+      assets: "frontend",
+      prefix: "/",
+    })
+  )
+  .get("/", () => Bun.file("frontend/index.html"))
   .listen(3001);
 
-  console.log(`🚀 Minin.in is running on ${app.server?.url}`);
+console.log(`🚀 Minin.in is running on ${app.server?.url}`);
 
 process.on("SIGTERM", async () => {
   console.log("🛑 API shutting down...");

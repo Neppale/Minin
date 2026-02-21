@@ -1,0 +1,5 @@
+# Dependencies and build
+node_modules
+
+# Frontend (separate tooling)
+frontend

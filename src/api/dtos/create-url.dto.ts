@@ -1,6 +1,6 @@
 import { t } from "elysia";
 
-const DEFAULT_EXPIRATION_DATE = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
+const DEFAULT_EXPIRATION_DATE = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
 
 export const CreateUrlDto = t.Object({
   originalUrl: t.String({
