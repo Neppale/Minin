@@ -1,13 +1,12 @@
 import { drizzleClient } from "../infra/database/drizzle/client";
 import { createWorker } from "../infra/queue/rabbitmq/worker";
-import { UrlRepository } from "../infra/database/drizzle/url.repository";
-import { redisClient as cache } from "../infra/cache/redis/client";
+import { ClickRepository } from "../infra/database/drizzle/click.repository";
 
 console.log("👷 Worker is starting...");
 
-const urlRepo = new UrlRepository(drizzleClient);
+const clickRepo = new ClickRepository(drizzleClient);
 
-createWorker(urlRepo, cache).catch((error) => {
+createWorker(clickRepo).catch((error) => {
   console.error("Failed to start worker:", error);
   process.exit(1);
 });

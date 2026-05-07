@@ -2,11 +2,13 @@ import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./schema";
 
-const url = process.env.TURSO_DATABASE_URL;
-const authToken = process.env.TURSO_AUTH_TOKEN;
+const url = process.env.DATABASE_URL;
+const authToken = process.env.DATABASE_AUTH_TOKEN;
+const env = process.env.ENV;
 
-if (!url) throw new Error("TURSO_DATABASE_URL is not defined");
-if (!authToken) throw new Error("TURSO_AUTH_TOKEN is not defined");
+if (!url) throw new Error("DATABASE_URL is not defined");
+if (!authToken && env !== "LOCAL")
+  throw new Error("DATABASE_AUTH_TOKEN is not defined");
 
 const client = createClient({
   url,

@@ -8,13 +8,18 @@ import { LoadUrl } from "../core/useCases/load-url";
 import { drizzleClient } from "../infra/database/drizzle/client";
 import { redisClient as cache } from "../infra/cache/redis/client";
 import { Healthcheck } from "../core/useCases/healthcheck";
+import { SendClickData } from "../core/useCases/send-click-data";
+import { RabbitmqAdapter } from "../infra/queue/rabbitmq/rabbitmq.adapter";
 import { cors } from "@elysiajs/cors";
 import { staticPlugin } from "@elysiajs/static";
+import { generateClickData } from "../utils/generators/click-data.generator";
 
 const urlRepository = new UrlRepository(drizzleClient);
 const createUrl = new CreateUrl(urlRepository, cache);
 const loadUrl = new LoadUrl(urlRepository);
 const healthcheck = Healthcheck.getInstance();
+const queue = new RabbitmqAdapter();
+const sendClickData = new SendClickData(queue);
 
 const app = new Elysia()
   .use(cors())
@@ -34,11 +39,17 @@ const app = new Elysia()
       )
       .get(
         "/:id",
-        async ({ params }) => {
+        async ({ params, request }) => {
           const cachedOriginalUrl = await cache.get(params.id);
-          if (cachedOriginalUrl) return redirect(cachedOriginalUrl, 307);
+          if (cachedOriginalUrl) {
+            sendClickData.send(generateClickData(params.id, request));
+            return redirect(cachedOriginalUrl, 307);
+          }
           const url = await loadUrl.load(params.id);
-          if (url) return redirect(url.originalUrl, 307);
+          if (url) {
+            sendClickData.send(generateClickData(params.id, request));
+            return redirect(url.originalUrl, 307);
+          }
           throw new NotFoundError("The URL you are looking for does not exist");
         },
         {
@@ -59,11 +70,13 @@ console.log(`🚀 Minin.in is running on ${app.server?.url}`);
 
 process.on("SIGTERM", async () => {
   console.log("🛑 API shutting down...");
+  await queue.close();
   process.exit(0);
 });
 
 process.on("SIGINT", async () => {
   console.log("🛑 API shutting down...");
+  await queue.close();
   process.exit(0);
 });
 
