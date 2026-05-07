@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it, mock } from "bun:test";
+import { describe, expect, it, mock } from "bun:test";
 import { CreateUrl } from "../useCases/create-url";
 import { CreateAttemptsExceededError } from "../../utils/handlers/error.handler";
 import type { Url } from "../entities/url.entity";
@@ -23,10 +23,6 @@ function makeCache(set: CachePort["set"]): CachePort {
 }
 
 describe("CreateUrl", () => {
-  beforeAll(() => {
-    Bun.env.ID_SECRET_KEY = "test-secret-key";
-  });
-
   it("should call urlRepository.create once when create succeeds on first attempt", async () => {
     const createdUrl: Url = {
       id: "id1",
