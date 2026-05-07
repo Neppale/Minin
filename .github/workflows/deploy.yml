@@ -88,6 +88,7 @@ jobs:
         run: bun run lint
 
   deploy:
+    environment: Development
     runs-on: ubuntu-latest
     needs: [build, test, audit, lint]
     if: github.ref == 'refs/heads/main'
