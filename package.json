@@ -8,15 +8,15 @@
     "prettier": "prettier --check .",
     "precommit": "bun run scripts/pre-commit.ts",
     "audit": "bun audit --audit-level=critical",
-    "dev:api": "bun run --watch src/api/index.ts",
-    "debug:api": "bun --inspect-wait=ws://localhost:9229/debug --watch src/api/index.ts",
+    "dev:api": "bun run --watch src/api/main.ts",
+    "debug:api": "bun --inspect-wait=ws://localhost:9229/debug --watch src/api/main.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "dev:worker": "bun run --watch src/worker/worker.ts",
-    "debug:worker": "bun --inspect-wait=ws://localhost:9229/debug --watch src/worker/worker.ts",
-    "prod:api": "bun run src/api/index.ts",
-    "prod:worker": "bun run src/worker/worker.ts",
+    "dev:worker": "bun run --watch src/worker/main.ts",
+    "debug:worker": "bun --inspect-wait=ws://localhost:9229/debug --watch src/worker/main.ts",
+    "prod:api": "bun run src/api/main.ts",
+    "prod:worker": "bun run src/worker/main.ts",
     "prepare": "husky"
   },
   "dependencies": {
@@ -25,7 +25,7 @@
     "@libsql/client": "^0.17.0",
     "amqplib": "^0.10.9",
     "drizzle-orm": "^0.45.1",
-    "elysia": "latest",
+    "elysia": "1.4.25",
     "ua-parser-js": "^2.0.9"
   },
   "devDependencies": {

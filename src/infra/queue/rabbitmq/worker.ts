@@ -1,7 +1,7 @@
 import amqp from "amqplib";
 import type { ClickRepositoryPort } from "../../../core/ports/click-repository.port";
 import type { CreateClickData } from "../../../core/entities/click.entity";
-import { rabbitmqConfig, QUEUE_NAME } from "./config";
+import { getQueueName, getRabbitmqConnectionOptions } from "./config";
 
 const BATCH_SIZE = 100;
 const BATCH_TIMEOUT_MS = 2000;
@@ -39,16 +39,11 @@ function parsePersistClick(msg: amqp.ConsumeMessage): CreateClickData | null {
 }
 
 export const createWorker = async (clickRepo: ClickRepositoryPort) => {
-  const connection = await amqp.connect({
-    hostname: rabbitmqConfig.hostname,
-    port: rabbitmqConfig.port,
-    username: rabbitmqConfig.username,
-    password: rabbitmqConfig.password,
-    vhost: rabbitmqConfig.vhost,
-  });
+  const queueName = getQueueName();
+  const connection = await amqp.connect(getRabbitmqConnectionOptions());
 
   const channel = await connection.createChannel();
-  await channel.assertQueue(QUEUE_NAME, {
+  await channel.assertQueue(queueName, {
     durable: true,
   });
 
@@ -67,11 +62,29 @@ export const createWorker = async (clickRepo: ClickRepositoryPort) => {
 
     const batch = buffer.splice(0, buffer.length);
     const rows = batch.map((b) => b.row);
-    await clickRepo.createMany(rows);
+    try {
+      await clickRepo.createMany(rows);
+      for (const b of batch) {
+        channel.ack(b.msg);
+      }
+    } catch (error: unknown) {
+      console.error("Failed to persist click batch:", error);
+      for (const b of batch) {
+        try {
+          channel.nack(b.msg, false, true);
+        } catch (nackErr: unknown) {
+          console.error("nack failed:", nackErr);
+        }
+      }
+    }
   };
 
   const scheduleFlush = (): void => {
-    flushChain = flushChain.then(() => doFlush());
+    flushChain = flushChain
+      .then(() => doFlush())
+      .catch((error: unknown) => {
+        console.error("Flush chain error:", error);
+      });
   };
 
   const armTimer = (): void => {
@@ -85,11 +98,11 @@ export const createWorker = async (clickRepo: ClickRepositoryPort) => {
   };
 
   console.log(
-    `👷 Worker connected to RabbitMQ. Waiting for messages in ${QUEUE_NAME}...`
+    `👷 Worker connected to RabbitMQ. Waiting for messages in ${queueName}...`
   );
 
   const { consumerTag } = await channel.consume(
-    QUEUE_NAME,
+    queueName,
     (msg: amqp.ConsumeMessage | null) => {
       if (!msg) return;
 
@@ -124,7 +137,9 @@ export const createWorker = async (clickRepo: ClickRepositoryPort) => {
     if (consumerTag) {
       await channel.cancel(consumerTag);
     }
-    await flushChain;
+    await flushChain.catch((err: unknown) => {
+      console.error("Flush chain on shutdown:", err);
+    });
     if (buffer.length > 0) {
       await doFlush();
     }

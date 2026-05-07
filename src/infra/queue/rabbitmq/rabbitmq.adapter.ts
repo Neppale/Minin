@@ -1,25 +1,19 @@
 import amqp from "amqplib";
 import { QueuePort } from "../../../core/ports/queue.port";
-import { rabbitmqConfig, QUEUE_NAME } from "./config";
+import { getQueueName, getRabbitmqConnectionOptions } from "./config";
 
 export class RabbitmqAdapter implements QueuePort {
   private connection: amqp.ChannelModel | null = null;
   private channel: amqp.Channel | null = null;
   private queueName: string;
 
-  constructor(queueName: string = QUEUE_NAME) {
+  constructor(queueName: string = getQueueName()) {
     this.queueName = queueName;
   }
 
   private async ensureConnection(): Promise<void> {
     if (!this.connection) {
-      this.connection = await amqp.connect({
-        hostname: rabbitmqConfig.hostname,
-        port: rabbitmqConfig.port,
-        username: rabbitmqConfig.username,
-        password: rabbitmqConfig.password,
-        vhost: rabbitmqConfig.vhost,
-      });
+      this.connection = await amqp.connect(getRabbitmqConnectionOptions());
     }
 
     if (!this.channel) {
