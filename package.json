@@ -17,7 +17,12 @@
     "debug:worker": "bun --inspect-wait=ws://localhost:9229/debug --watch src/worker/main.ts",
     "prod:api": "bun run src/api/main.ts",
     "prod:worker": "bun run src/worker/main.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "build:api": "bun build --target bun src/api/main.ts --outdir dist/api",
+    "build:worker": "bun build --target bun src/worker/main.ts --outdir dist/worker",
+    "build:all": "bun run build:api && bun run build:worker",
+    "start:api": "bun run dist/api/main.js",
+    "start:worker": "bun run dist/worker/main.js"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",

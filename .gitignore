@@ -47,3 +47,6 @@ package-lock.json
 *.db-journal
 *.db-shm
 *.db-wal
+
+# build
+dist

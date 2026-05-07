@@ -1,4 +1,5 @@
 const steps = [
+  { name: "build", script: "build:all" },
   { name: "tests", script: "test" },
   { name: "Prettier", script: "prettier" },
   { name: "ESLint", script: "lint" },
