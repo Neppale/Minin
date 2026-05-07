@@ -23,6 +23,7 @@ export function assertApiEnv(): void {
   assertDatabaseAuthToken();
   requireNonEmpty("RABBITMQ_USERNAME");
   requireNonEmpty("RABBITMQ_PASSWORD");
+  requireNonEmpty("ID_SECRET_KEY");
 }
 
 export function assertWorkerEnv(): void {
@@ -30,4 +31,5 @@ export function assertWorkerEnv(): void {
   assertDatabaseAuthToken();
   requireNonEmpty("RABBITMQ_USERNAME");
   requireNonEmpty("RABBITMQ_PASSWORD");
+  requireNonEmpty("ID_SECRET_KEY");
 }

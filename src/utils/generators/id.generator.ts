@@ -3,11 +3,11 @@ import { createHmac } from "node:crypto";
 const ALPHABET =
   "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const BASE = BigInt(ALPHABET.length);
-const ID_SECRET_KEY = process.env.ID_SECRET_KEY || "mininin";
+const ID_SECRET_KEY = process.env.ID_SECRET_KEY;
 
 export function generateId(originalUrl: string): string {
   const currentTimestamp = Date.now();
-  const hash = createHmac("sha256", ID_SECRET_KEY)
+  const hash = createHmac("sha256", ID_SECRET_KEY!)
     .update(`${originalUrl}:${currentTimestamp}`)
     .digest("hex");
 

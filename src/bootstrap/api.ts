@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { assertApiEnv } from "../env/assert-env";
+import { assertApiEnv } from "../utils/env/assert-env";
 import { createRedisCache } from "../infra/cache/redis/client";
 import { createDrizzleClient } from "../infra/database/drizzle/client";
 import { UrlRepository } from "../infra/database/drizzle/url.repository";

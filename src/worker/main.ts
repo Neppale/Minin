@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { assertWorkerEnv } from "../env/assert-env";
+import { assertWorkerEnv } from "../utils/env/assert-env";
 import { createDrizzleClient } from "../infra/database/drizzle/client";
 import { createWorker } from "../infra/queue/rabbitmq/worker";
 import { ClickRepository } from "../infra/database/drizzle/click.repository";

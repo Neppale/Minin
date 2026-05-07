@@ -13,6 +13,7 @@ export const CreateUrlDto = t.Object({
       },
     ],
     format: "uri",
+    pattern: "^https?://.*",
   }),
   expirationDate: t.Date({
     title: "Expiration Date",
